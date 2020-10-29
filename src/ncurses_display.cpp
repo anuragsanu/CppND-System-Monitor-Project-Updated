@@ -3,6 +3,7 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <iostream>
 
 #include "format.h"
 #include "ncurses_display.h"
@@ -37,7 +38,7 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
   mvwprintw(window, row, 10, "");
   wprintw(window, ProgressBar(system.Cpu().Utilization()).c_str());
   wattroff(window, COLOR_PAIR(1));
-  mvwprintw(window, ++row, 2, "Memory: ");
+  mvwprintw(window, ++row, 2, ("Memory: "+ to_string(system.MemoryUtilization()* 100)).c_str());
   wattron(window, COLOR_PAIR(1));
   mvwprintw(window, row, 10, "");
   wprintw(window, ProgressBar(system.MemoryUtilization()).c_str());
