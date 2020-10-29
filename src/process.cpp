@@ -17,6 +17,7 @@ using std::vector;
 // TODO: Return this process's ID
 int Process::Pid() { return std::stoi(pd);}
 
+// algorithm used is from https://stackoverflow.com/questions/16726779/how-do-i-get-the-total-cpu-usage-of-an-application-from-proc-pid-stat/16736599#16736599
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() {
     const std::string stat_dir(LinuxParser::kProcDirectory + pd  + LinuxParser::kStatFilename);

@@ -76,6 +76,7 @@ float caluclateMemory(const std::vector<std::pair<T1 , T2>>& vec)
 }
 
 // TODO: Return the system's memory utilization
+// Algorithm used is from https://stackoverflow.com/questions/41224738/how-to-calculate-system-memory-usage-from-proc-meminfo-like-htop/41251290#41251290
 float System::MemoryUtilization() {
     const std::string fileName = LinuxParser::kProcDirectory + LinuxParser::kMeminfoFilename;
     std::ifstream fs(fileName);

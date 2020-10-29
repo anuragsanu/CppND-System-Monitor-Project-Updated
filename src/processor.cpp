@@ -13,6 +13,7 @@ using std::string ;
 using std::vector;
 
 // TODO: Return the aggregate CPU utilization
+// the algorithm used is from https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
 float Processor::Utilization() { 
     const std::string statFile =  LinuxParser::kProcDirectory + LinuxParser::kStatFilename;
     std::ifstream fs(statFile);
