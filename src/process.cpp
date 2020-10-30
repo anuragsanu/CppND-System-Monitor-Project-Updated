@@ -23,12 +23,15 @@ float Process::CpuUtilization() {
     const std::string stat_dir(LinuxParser::kProcDirectory + pd  + LinuxParser::kStatFilename);
     const std::string uptimefile = LinuxParser::kProcDirectory + LinuxParser::kUptimeFilename;
     std::ifstream fs1(uptimefile);
+    std::ifstream fs(stat_dir);
+    if(fs1.is_open())
+    {
+        if(fs.is_open()){
     std::string timestr;
     std::getline(fs1 , timestr);
     std:: string localTimeinSeconds;
     std::istringstream ss1(timestr); 
     ss1 >> localTimeinSeconds;
-    std::ifstream fs(stat_dir);
     string line;
     string value;
     int u_time;
@@ -39,8 +42,6 @@ float Process::CpuUtilization() {
     std::getline(fs , line);
     std::istringstream ss(line);
     int i =0;
-     try
-    {
     while(i != 22 && (ss >> value) && ++i)
     { 
      if(i == 13)
@@ -64,15 +65,14 @@ float Process::CpuUtilization() {
           p_startTime = std::stoi(value);
       }
     }
-    }catch(std::exception e)
-    {
-    }
- 
     int totaltime = u_time + s_time + cu_time + cs_time;
     totaltime = totaltime/sysconf(_SC_CLK_TCK);
     int process_total_time = std::stoi(localTimeinSeconds) - (p_startTime/sysconf(_SC_CLK_TCK));
 
     return totaltime/double(process_total_time);
+    }
+    }
+    return 0;
 
 }
 
@@ -80,15 +80,22 @@ float Process::CpuUtilization() {
 string Process::Command() { 
     const std::string command_dir(LinuxParser::kProcDirectory +  pd + LinuxParser::kCmdlineFilename);
     std::ifstream fs(command_dir);
+    if(fs.is_open())
+    {
     std::string command;
     std::getline(fs , command);
+
     return command;
+    }
+    return "";
 }
 
 // TODO: Return this process's memory utilization
 string Process::Ram() { 
     const std::string  memory_dir(LinuxParser::kProcDirectory + pd + LinuxParser::kStatusFilename);
     std::ifstream fs(memory_dir);
+    if(fs.is_open())
+    {
     std::string line;
     std::string key;
     std::string value;
@@ -104,6 +111,7 @@ string Process::Ram() {
         }
 
     }
+    }
     return string();
  }
 
@@ -112,6 +120,10 @@ string Process::User() {
     const std::string statusFile = LinuxParser::kProcDirectory + pd + LinuxParser::kStatusFilename;
     std::ifstream pfs(LinuxParser::kPasswordPath);
     std::ifstream fs(statusFile);
+    if(pfs.is_open())
+    {
+       if(fs.is_open())
+       {
     std::string line;
     std::string key1 , value1;
     std::string key2 , value2 , value3;
@@ -137,6 +149,9 @@ string Process::User() {
         }
     }
 
+    }
+    }
+
 
     return string(); 
 }
@@ -145,20 +160,18 @@ string Process::User() {
 long int Process::UpTime() {
     const std::string uptime_dir(LinuxParser::kProcDirectory + pd  + LinuxParser::kStatFilename);
     std::ifstream fs(uptime_dir);
+    if(fs.is_open())
+    {
     long uptime;
     std::string time;
     std::getline(fs , time);
     std::istringstream ss(time);
     int i =0;
     while(i != 22 && (ss >> time) && ++i);
-    try
-    {
-      uptime = std::stol(time)/sysconf(_SC_CLK_TCK);
-    }catch(std::exception e)
-    {
-    }
- 
+    uptime = std::stol(time)/sysconf(_SC_CLK_TCK);
     return uptime;
+    }
+    return 0;
 }
 
 // TODO: Overload the "less than" comparison operator for Process objects

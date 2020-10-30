@@ -57,13 +57,17 @@ vector<Process>& System::Processes() {
 // TODO: Return the system's kernel identifier (string)
 std::string System::Kernel() { 
     const std::string fileName = LinuxParser::kProcDirectory + LinuxParser::kVersionFilename;
-    std::string os , version , kernel;
     std::ifstream fs(fileName);
+    if(fs.is_open())
+    {
+    std::string os , version , kernel;
     std::string line ;
     std::getline(fs, line);
     std::istringstream ss(line);
     ss >> os >> version >> kernel;
     return kernel;
+    }
+    return "";
 }
 
 template<class T1 , class T2> 
@@ -80,6 +84,8 @@ float caluclateMemory(const std::vector<std::pair<T1 , T2>>& vec)
 float System::MemoryUtilization() {
     const std::string fileName = LinuxParser::kProcDirectory + LinuxParser::kMeminfoFilename;
     std::ifstream fs(fileName);
+    if(fs.is_open())
+    {
     std::string line;
     std::string key ;
     std::string value;
@@ -94,7 +100,8 @@ float System::MemoryUtilization() {
         
     }
     return caluclateMemory<string , int>(vec);
-    
+    }
+    return 0;
 }
 
 
@@ -135,6 +142,8 @@ std::string System::OperatingSystem() {
 int System::RunningProcesses() { 
     const std::string statFile = LinuxParser::kProcDirectory + LinuxParser::kStatFilename ;
     std::ifstream fs(statFile);
+    if(fs.is_open())
+    {
     std::string line;
     std::string key;
     std::string value;
@@ -148,6 +157,7 @@ int System::RunningProcesses() {
             return std::stoi(value);
         }
     }
+    }
     
     return 0;
 }
@@ -156,6 +166,8 @@ int System::RunningProcesses() {
 int System::TotalProcesses() { 
     const std::string statFile = LinuxParser::kProcDirectory + LinuxParser::kStatFilename;
     std::ifstream fs(statFile);
+    if(fs.is_open())
+    {
     string line;
     string key , value ;
     while(std::getline(fs , line))
@@ -168,6 +180,7 @@ int System::TotalProcesses() {
        }
 
     }  
+    }
     return 0; 
 }
 
@@ -176,6 +189,8 @@ long int System::UpTime() {
     
     const std::string uptimefile = LinuxParser::kProcDirectory + LinuxParser::kUptimeFilename;
     std::ifstream fs(uptimefile);
+    if(fs.is_open())
+    {
     std::string timestr;
     std::getline(fs , timestr);
     std:: string localTimeinSeconds;
@@ -183,5 +198,7 @@ long int System::UpTime() {
     ss >> localTimeinSeconds;
     long int localTime = std::stol(localTimeinSeconds);
     return localTime;
+    }
+    return 0;
     
 }

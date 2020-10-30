@@ -17,6 +17,7 @@ using std::vector;
 float Processor::Utilization() { 
     const std::string statFile =  LinuxParser::kProcDirectory + LinuxParser::kStatFilename;
     std::ifstream fs(statFile);
+    if(fs.is_open()){
     std::string line;
     std::getline(fs , line);
     std::istringstream ss(line);
@@ -43,4 +44,6 @@ float Processor::Utilization() {
     prevTotal = totaltime;
     prevtotalIdle = previdle + previowait;
     return  cpuUtilization;
+    }
+    return 0.0;
 }
