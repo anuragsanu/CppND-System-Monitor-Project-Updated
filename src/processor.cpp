@@ -30,17 +30,17 @@ float Processor::Utilization() {
        vec.emplace_back(std::stoi(value));
     }
     int totaltime = std::accumulate(vec.begin() ,vec.end() , 0);
-    totaltime = totaltime - vec[8] - vec[9];
-    int idle = vec[3] + vec[4];
+    totaltime = totaltime - vec[static_cast<int>(LinuxParser::CPUStates::kGuest_)] - vec[static_cast<int>(LinuxParser::CPUStates::kGuestNice_)];
+    int idle = vec[static_cast<int>(LinuxParser::CPUStates::kIdle_)] + vec[static_cast<int>(LinuxParser::CPUStates::kIOwait_)];
     float cpuUtilization = ((totaltime -prevTotal) - (idle - prevtotalIdle))/float(totaltime - prevTotal);
-    prevuser = vec[0];
-    prevnice = vec[1];
-    prevsystem = vec[2];
-    previdle = vec[3];
-    previowait = vec[4];
-    previrq = vec[5];
-    prevsoftirq = vec[6];
-    prevsteal = vec[7];
+    prevuser = vec[static_cast<int>(LinuxParser::CPUStates::kUser_)];
+    prevnice = vec[static_cast<int>(LinuxParser::CPUStates::kNice_)];
+    prevsystem = vec[static_cast<int>(LinuxParser::CPUStates::kSystem_)];
+    previdle = vec[static_cast<int>(LinuxParser::CPUStates::kIdle_)];
+    previowait = vec[static_cast<int>(LinuxParser::CPUStates::kIOwait_)];
+    previrq = vec[static_cast<int>(LinuxParser::CPUStates::kIRQ_)];
+    prevsoftirq = vec[static_cast<int>(LinuxParser::CPUStates::kSoftIRQ_)];
+    prevsteal = vec[static_cast<int>(LinuxParser::CPUStates::kSteal_)];
     prevTotal = totaltime;
     prevtotalIdle = previdle + previowait;
     return  cpuUtilization;

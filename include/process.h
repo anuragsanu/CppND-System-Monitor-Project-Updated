@@ -19,6 +19,14 @@ class Process {
 
   // TODO: Declare any necessary private members
  private:
+  enum class ProcessTime
+  {
+      U_TIME =13,
+      S_TIME,
+      CU_TIME,
+      CS_TIME,
+      ST_TIME = 21
+  };
 };
 
 #endif
